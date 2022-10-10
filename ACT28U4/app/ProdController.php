@@ -43,7 +43,7 @@ if(isset($_POST['action'])){
 class ProdController{
 
     public function consImg($arch){
-        $target_path  = BASE_PATH.'public/image';
+        $target_path  = '../public/image/';
         $target_path = $target_path . basename( $_FILES['uploadedfile']['name']); 
         if(move_uploaded_file($_FILES['uploadedfile']['tmp_name'], $target_path)) {
             echo "El archivo ".  basename( $_FILES['uploadedfile']['name']). 
@@ -101,8 +101,8 @@ class ProdController{
     $response = curl_exec($curl);
     curl_close($curl);
 
-    header("Location: ".BASE_PATH."productos/index.php?success=true");
-    var_dump(response);
+    #header("Location: ".BASE_PATH."productos/index.php?success=true");
+    var_dump($response);
     
     }
     public function editProduct($name, $slug, $description, $features, $brand_id, $id)
