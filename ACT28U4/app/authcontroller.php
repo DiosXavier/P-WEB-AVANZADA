@@ -1,7 +1,6 @@
 <?php
 
-include_once "config.php";
-
+include "config.php";
 
 
 if(isset($_POST['accion'])){
@@ -47,10 +46,10 @@ class AuthController{
             $_SESSION['avatar']=$response->data->avatar;
             $_SESSION['token']=$response->data->token;
             var_dump($response);
-            header("location: ../productos/index.php");
+            header('location: '.BASE_PATH.'productos/index.php');
         }else{
             var_dump($response);
-            header("location: ../?error=true");
+            header('location: '.BASE_PATH.'?error=true');
         }
 
 

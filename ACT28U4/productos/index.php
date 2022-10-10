@@ -3,17 +3,16 @@
       $p = new ProdController();
       $data = $p->getTodo();
       $objetos = json_decode($data)->data;
-      #print_r($objetos);
-  ?>
-
-<?php
-    $brands =  ProdController::getMarcas();
+    include '..\app\brandController.php';
+    $brands =  brandController::getMarcas();
+    include_once "..\app\config.php";
 ?>
 
 <!DOCTYPE html>
 <html>
     <head>
         <?php include "../layouts/head.template.php"; ?>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     </head>
     <body>
         <!--NAVBAR-->
@@ -45,7 +44,7 @@
                     <h5 class="card-title"><?php echo $producto->name; ?></h5>
                     <p class="card-text"><?php echo $producto->description; ?></p>
                     <a href="#" data-product='<?php echo json_encode($producto) ?>' onclick="edit(this)" class="btn btn-warning col-md-6" data-bs-toggle="modal" data-bs-target="#exampleModal">Editar</a>
-                    <a href="#" onclick="remove(this)" class="btn btn-danger col-6">Eliminar</a>
+                    <a href="#" class="btn btn-danger col-md-6" onclick="remove(<?php echo $producto->id ?>)">Eliminar</a>
                     <a href=<?php echo "detalles.php?slug=".$producto->slug.""?> class='btn btn-primary col-6' >Ver detalles</a>
                     </div>
                     </div>
@@ -58,9 +57,12 @@
             </div>
         </div>
 
+        <!--SCRIPTS-->
+        <?php include "../layouts/script.template.php"; ?>
+
         <script type="text/javascript">
             
-            function addProduct() {
+        function addProduct() {
             document.getElementById('productInput').value = 'create';
             document.getElementById("name").value = "";
             document.getElementById("slug").value = "";
@@ -68,13 +70,37 @@
             document.getElementById("features").value = "";
             document.getElementById("brand_id").value = 1;
         }
-            function remove(target){
-                Swal.fire({
-                icon: 'error',
-                title: 'Eliminacion...',
-                text: 'Se esta eliminando producto.'
-                })
-            }
+        async function remove(id){
+        swal.fire({
+          title: "¿Estás seguro?",
+          text: "Una vez eliminado, ya no podrás recuperar este producto!",
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+        })
+        .then((willDelete) => {
+          if (willDelete) {
+            swal.fire("El producto ha sido eliminado satisfactoriamente", {
+              icon: "success",
+            });
+            var bodyFormData = new FormData();
+               bodyFormData.append('id', id);
+               bodyFormData.append('action', 'remove');
+               bodyFormData.append('global_token', '<?php echo $_SESSION['global_token'] ?>');
+               axios.post("<?=BASE_PATH?>prod", bodyFormData)
+               .then(function (response){
+                   console.log(response);
+                   location.reload();
+               })
+               .catch(function (error){
+                   console.log('error')
+               })
+          } else {
+            swal("Tu producto esta a salvo!");
+          }
+        });
+      }
+            
             function edit(target) {
                 document.getElementById('productInput').value = 'update';
                 let product = JSON.parse(target.getAttribute('data-product'));
@@ -93,8 +119,7 @@
             }
         </script>
 
-        <!--SCRIPTS-->
-        <?php include "../layouts/script.template.php"; ?>
+        
 
         <!--SCRIPT DE MODAL-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script> 
@@ -107,7 +132,7 @@
             <h5 class="modal-title" id="exampleModalLabel">Agregar Producto.</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <form  method="POST" action="../app/ProdController.php" enctype="multipart/form-data" >       
+        <form  method="POST" action="<?=BASE_PATH?>prod" enctype="multipart/form-data" >         
             <div class="modal-body">
             <div class="input-group">
                 <span class="input-group-text">Nombre del producto</span>

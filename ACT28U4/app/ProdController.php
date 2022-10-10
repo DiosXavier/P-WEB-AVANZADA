@@ -1,6 +1,6 @@
 
 <?php
-include_once "config.php";
+include  "config.php";
 
 
 if(isset($_POST['action'])){
@@ -25,8 +25,14 @@ if(isset($_POST['action'])){
                 $features = strip_tags($_POST['features']);
                 $brand_id = strip_tags($_POST['brand']);
                 $id = strip_tags($_POST['id']);
-                $productsController = new ProdController;
-                $productsController->editProduct($name, $slug, $description, $features, $brand, $id);
+                $p = new ProdController;
+                $p->editProduct($name, $slug, $description, $features, $brand, $id);
+                break;
+
+                case 'remove':
+                    $id = strip_tags($_POST['id']);
+                    $p = new ProdController;
+                    $p->remove($id);
                 break;
         
     }
@@ -37,7 +43,7 @@ if(isset($_POST['action'])){
 class ProdController{
 
     public function consImg($arch){
-        $target_path  = '../public/image';
+        $target_path  = BASE_PATH.'public/image';
         $target_path = $target_path . basename( $_FILES['uploadedfile']['name']); 
         if(move_uploaded_file($_FILES['uploadedfile']['tmp_name'], $target_path)) {
             echo "El archivo ".  basename( $_FILES['uploadedfile']['name']). 
@@ -95,8 +101,8 @@ class ProdController{
     $response = curl_exec($curl);
     curl_close($curl);
 
-    unlink($imagen);
-    header('Location: ../productos/index.php?success=true');
+    header("Location: ".BASE_PATH."productos/index.php?success=true");
+    var_dump(response);
     
     }
     public function editProduct($name, $slug, $description, $features, $brand_id, $id)
@@ -122,41 +128,13 @@ class ProdController{
   
       curl_close($curl);
       if (isset ($response->code) && $response->code > 0){
-        header('Location: ../productos/index.php?success=true');
+        header('location: '.BASE_PATH.'productos/index.php?success=true');
       } else {
-        header('Location: ../productos/index.php?error=false');
+        header('location: '.BASE_PATH.'productos/index.php?error=false');
       }
     }
 
-    public static function getMarcas(){
-        
-        $curl = curl_init();
-        
-        $token = $_SESSION['token'];
-        curl_setopt_array($curl, array(
-          CURLOPT_URL => 'https://crud.jonathansoto.mx/api/brands',
-          CURLOPT_RETURNTRANSFER => true,
-          CURLOPT_ENCODING => '',
-          CURLOPT_MAXREDIRS => 10,
-          CURLOPT_TIMEOUT => 0,
-          CURLOPT_FOLLOWLOCATION => true,
-          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-          CURLOPT_CUSTOMREQUEST => 'GET',
-          CURLOPT_HTTPHEADER => array(
-            'Authorization: Bearer '.$token
-          ),
-        ));$response = curl_exec($curl); 
-        curl_close($curl);
-        $response = json_decode($response);
-        
-        if ( isset($response->code) && $response->code > 0) {
-            
-            return $response->data;
-        }else{
-        
-            return array();
-        }
-            }
+    
 
 
             public static function getPslug($slug){
@@ -190,6 +168,35 @@ class ProdController{
                 }
         
             }
+
+
+        public function remove($id){
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => 'https://crud.jonathansoto.mx/api/products/'.$id,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'DELETE',
+        CURLOPT_HTTPHEADER => array(
+            'Authorization: Bearer ' . $_SESSION['token']
+        ),
+        ));
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+        $response = json_decode ($response);
+        if (isset ($response->code) && $response->code > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
         
 
     }
