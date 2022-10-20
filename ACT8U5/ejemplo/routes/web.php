@@ -20,6 +20,7 @@ Route::get('/', function () {
 });
 
 Route::get('saludo/{name}',function($name){
+    
     echo "HOLA ".$name;
 });
 
