@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ClientController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,5 +42,9 @@ route::get('users/create',[UserController::class,'create']);
 route::get('users/{id}',[UserController::class,'show']);
 
 route::post('users/',[UserController::class,'store']);
+
+route::get('clients/',[ClientController::class,'index']);
+
+route::get('clients/{id}',[ClientController::class,'show']);
 
 
