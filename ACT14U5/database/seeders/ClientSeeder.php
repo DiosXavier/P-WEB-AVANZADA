@@ -25,9 +25,9 @@ class ClientSeeder extends Seeder
 
 
         $client = new Client();
-        $client->name = 'Nigga';
+        $client->name = 'xd';
         $client->phone_number = '6969696969';
-        $client->email = 'urmmisgy.com';
+        $client->email = 'jeje_xd_99.com';
         $client->save();
 
 
