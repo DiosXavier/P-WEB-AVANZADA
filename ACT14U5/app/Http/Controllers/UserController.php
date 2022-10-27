@@ -29,7 +29,7 @@ class UserController extends Controller
         //
         // echo 'dafsdgj,';
 
-        return view('create_user');
+        return view('create_user'); 
     }
 
     /**
