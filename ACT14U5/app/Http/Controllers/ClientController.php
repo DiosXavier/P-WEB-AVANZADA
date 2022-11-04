@@ -14,8 +14,8 @@ class ClientController extends Controller
      */
     public function index()
     {
-        return Client::with('reservations')->get();
-        //
+        $clients = Client::with('reservations')->get();
+        return view('show_clients',compact('clients'));
     }
 
     /**
@@ -25,7 +25,7 @@ class ClientController extends Controller
      */
     public function create()
     {
-        //
+        return view('clients.create');
     }
 
     /**
@@ -37,13 +37,22 @@ class ClientController extends Controller
     
     public function store(Request $request)
     {
-        //
+        //echo $request->name;
+        $clients = Client::create($request->all());
+        return $clients;
+        /*
+        $clients = new Client();
+
+        $clients = Client::create($request->all());
+
+        $clients -> name= $request->name;
+        */
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Client  $client
+     * @param  \App\Models\Client  $clients
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -54,33 +63,36 @@ class ClientController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Client  $client
+     * @param  \App\Models\Client  $clients
      * @return \Illuminate\Http\Response
      */
-    public function edit(Client $client)
+    public function edit($id)
     {
-        //
+        $client = client::with('reservations')->find($id);
+        return view('update_client',compact('client'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Client  $client
+     * @param  \App\Models\Client  $clients
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Client $client)
+    public function update(Request $request)
     {
-        //
+        $client=client::find($request->id);
+        $client->update($request->all());
+        return $client;
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Client  $client
+     * @param  \App\Models\Client  $clients
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Client $client)
+    public function destroy(Client $clients)
     {
         //
     }

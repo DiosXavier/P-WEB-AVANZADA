@@ -13,13 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('reservations', function (Blueprint $table) {
-            $table->id();
-            $table->integer('room_id');
-            $table->unsignedBigInteger('client_id');
-            $table->foreign('client_id')->references('id')->on('clients');
-            $table->timestamps();
-        });
+        //
     }
 
     /**
@@ -29,6 +23,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('reservations');
+        //
     }
 };

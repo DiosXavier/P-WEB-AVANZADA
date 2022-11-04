@@ -11,7 +11,7 @@ class Reservation extends Model
 
     protected $fillable=[
         "room_id",
-        "client_card"
+        "client_id"
     ];
 
     public function client(){

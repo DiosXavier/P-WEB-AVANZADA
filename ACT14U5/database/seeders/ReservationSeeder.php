@@ -17,18 +17,12 @@ class ReservationSeeder extends Seeder
 
         $res = new Reservation();
         $res->room_id = '1';
-        $res->client_card = '2121-1234-0000-4321';
+        $res->client_id = 1;
         $res->save();
  
         $res = new Reservation();
         $res->room_id = '2';
-        $res->client_card = '6969-6969-1111-2222';
-        $res->save();
-
-
-        $res = new Reservation();
-        $res->room_id = '3';
-        $res->client_card = '3223-5423-2222-1111';
+        $res->client_id = 2;
         $res->save();
     }
 }
