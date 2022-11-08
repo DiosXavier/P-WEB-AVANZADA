@@ -1,0 +1,56 @@
+<html>
+    <head>
+        <title>
+            Prueba de View show clients
+        </title>
+    </head>
+    <body>
+       <h1>
+        clientes
+       </h1>
+        <table>
+            <thead>
+            <tr>
+                    <td>
+                       ID
+                    </td>
+                    <td>
+                        NAME
+                    </td>
+                    <td>
+                        EMAIL
+                    </td>
+                    <td>
+                       PHONE NUMBER
+                    </td>
+                    <td>
+                        ACTION
+                    </td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($clients as $client)
+                <tr>
+                    <td>
+                        {{$client->id}}
+                    </td>
+                    <td>
+                        {{$client->name}}
+                    </td>
+                    <td>
+                        {{$client->email}}
+                    </td>
+                    <td>
+                        {{$client->phone_number}}
+                    </td>
+                    <td>
+                        <a href="{{url('/clients/edit',$client->id)}}">
+                            EDIT
+                        </a>
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </body>
+</html>
